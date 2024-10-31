@@ -12,6 +12,7 @@
             color: #80c3f3; /* Cor azul para todo o texto */
             margin: 0;
             padding: 0;
+            padding-top: 80px;
         }
 
         /* Estilo do cabeçalho */
@@ -155,8 +156,8 @@
 
 <header>
     <nav>
-        <button onclick="document.location='campoeletrico.html'">Campo Elétrico</button>
-        <button onclick="document.location='potencial.html'">Potencial Elétrico</button>
+        <button onclick="window.location.href='campoeletrico.html'">Campo Elétrico</button>
+        <button onclick="window.location.href='potencial.html'">Potencial Elétrico</button>
     </nav>
 </header>
 
@@ -186,45 +187,54 @@
         <h1>Cálculo do Campo Elétrico</h1><br>
         <img id="imagem" src="campoe2.png" alt="Campo Elétrico" style="width: 300px; height: 200px;">
         
-        <form action="campoeletrico.php" method="POST" style="margin: 20px;">
+        <form onsubmit="calcularCampoEletrico(event)">
             <label>
                 <p>Constante (k)</p>
-                <input type="number" name="k" required>
+                <input type="number" id="k" required>
             </label>
 
             <label>
                 <p>Q</p>
-                <input type="number" name="q" required>
+                <input type="number" id="q" required>
             </label>
 
             <label>
                 <p>Distância (d)</p>
-                <input type="number" name="d" required>
+                <input type="number" id="d" required>
             </label><br>
             <input type="submit" value="Calcular Campo" class="chavoso-button">
         </form>
+        <h2 id="resultado" style="text-align:center;"></h2>
     </div>
-
-    <?php
-    if ($_SERVER["REQUEST_METHOD"] == "POST") {
-        $k = $_POST['k'];
-        $q = $_POST['q'];
-        $d = $_POST['d'];
-
-        if ($d != 0) {
-            $f = $k * $q / ($d * $d);
-            echo "<h2 style='text-align:center;'>Campo Elétrico: $f N/C</h2>";
-        } else {
-            echo "<h2 style='text-align:center; color:red;'>Erro: A distância não pode ser zero.</h2>";
-        }
-    }
-    ?>
 </main>
 
 <div style="text-align: center;">
-    <button type="button" onclick="novovalor()" class="restaurar">Restaurar</button>
-    <button type="button" onclick="document.location='index.html'" class="voltar">Voltar para a Página Principal</button>
+    <button type="button" onclick="restaurarValores()" class="restaurar">Restaurar</button>
+    <button type="button" onclick="window.location.href='index.html'" class="voltar">Voltar para a Página Principal</button>
 </div>
+
+<script>
+    function calcularCampoEletrico(event) {
+        event.preventDefault();
+        const k = parseFloat(document.getElementById('k').value);
+        const q = parseFloat(document.getElementById('q').value);
+        const d = parseFloat(document.getElementById('d').value);
+
+        if (d !== 0) {
+            const f = (k * q) / (d * d);
+            document.getElementById('resultado').textContent = `Campo Elétrico: ${f.toFixed(2)} N/C`;
+        } else {
+            document.getElementById('resultado').textContent = "Erro: A distância não pode ser zero.";
+        }
+    }
+
+    function restaurarValores() {
+        document.getElementById('k').value = "";
+        document.getElementById('q').value = "";
+        document.getElementById('d').value = "";
+        document.getElementById('resultado').textContent = "";
+    }
+</script>
 
 </body>
 </html>
